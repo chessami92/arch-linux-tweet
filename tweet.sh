@@ -6,6 +6,11 @@
 username="replaceusername"
 password="replacepassword"
 tweet="$*" #must be less than 140 chars
+if [ "$tweet" == "" ]; then
+    ip=$(/sbin/ifconfig | grep inet | sed -e '/127.0.0.1/d' -e 's/^.*inet \([0-9.]*\).*$/\1/g')
+    time=$(date '+%Y-%m-%d %H:%M:%S')
+    tweet="Current IP: $ip as of $time"
+fi
  
 #EXTRA OPTIONS
 uagent="Mozilla/5.0" #user agent (fake a browser)
