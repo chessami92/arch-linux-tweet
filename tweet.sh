@@ -3,6 +3,7 @@
 #Author: Luka Pusic <pusic93@gmail.com>
 
 cd
+sleep 30
 
 #REQUIRED PARAMS
 username="replaceusername"
