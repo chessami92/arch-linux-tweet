@@ -1,7 +1,9 @@
 #!/bin/bash
 #Twitter status update bot by http://360percents.com
 #Author: Luka Pusic <pusic93@gmail.com>
- 
+
+cd
+
 #REQUIRED PARAMS
 username="replaceusername"
 password="replacepassword"

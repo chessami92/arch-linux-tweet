@@ -19,4 +19,4 @@ replaceExecPath="s/replaceexecpath/$execPath/"
 
 sed -e $replaceUser -e $replaceExecPath tweet.service > tweet.service.tmp
 echo Attempting su as root.
-su -c 'chgrp root tweet.service.tmp; chown root tweet.service.tmp; cp tweet.service.tmp /usr/lib/systemd/system/tweet.service; rm tweet.service.tmp'
+su -c 'chgrp root tweet.service.tmp; chown root tweet.service.tmp; cp tweet.service.tmp /usr/lib/systemd/system/tweet.service; rm tweet.service.tmp; systemctl enable tweet; systemctl start tweet'
