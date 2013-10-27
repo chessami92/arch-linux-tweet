@@ -10,6 +10,7 @@ replaceUser="s/replaceusername/$username/"
 replacePassword="s/replacepassword/$password/"
 sed -e $replaceUser -e $replacePassword tweet.sh > temp
 mv temp tweet.sh
+chmod 700 tweet.sh
 
 replaceUser="s/replaceusername/$USER/"
 execPath="$(pwd)/$(dirname $0)/"
