@@ -11,7 +11,7 @@ function rootPassword {
     echo -n "Confirm password for root account: "
     read -s password2
     echo
-    cat << FILE
+    passwd << FILE
 $password1
 $password2
 FILE
