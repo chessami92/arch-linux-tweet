@@ -1,6 +1,8 @@
 #!/bin/sh
 
-. runner.sh
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo $dir
+. $dir/runner.sh
 
 function rootPassword {
     echo -n "Enter password for root account: "
