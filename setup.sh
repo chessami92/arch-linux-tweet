@@ -29,5 +29,17 @@ $password
 FILE
 }
 
-runWithRetry rootPassword addUsers
+function setTimezone {
+    timedatectl set-timezone America/Chicago
+}
+
+function updateAll {
+    pacman -Syu --noconfirm
+}
+
+function installAll {
+    pacman -S --noconfirm vim git zsh gcc make
+}
+
+runWithRetry rootPassword addUsers setTimezone updateAll installAll
 
