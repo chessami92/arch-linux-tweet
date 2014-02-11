@@ -2,7 +2,7 @@
 
 cd $(dirname ${BASH_SOURCE[0]})
 
-. runner.sh
+. ./runner.sh
 
 function rootPassword {
     echo -n "Enter password for root account: "
@@ -31,9 +31,13 @@ function addUsers {
         ssh-keygen -t rsa -C $email <<< $'\n'
     fi
 
-    groupadd $group
     for i in $users; do
         userdel $i
+    done
+    groupdel $group
+
+    groupadd $group
+    for i in $users; do
         useradd -m -g $group $i
         echo -n "Enter password for the $i account: "
         read -s password
@@ -116,6 +120,8 @@ function setupUsers {
 }
 
 function setupApache {
+    groupdel http
+    groupadd http
     su http -c 'mkdir ~/uploads/;'
     if [ "$(grep PHP /etc/httpd/conf/httpd.conf)" == "" ]; then
         cat << FILE >> /etc/httpd/conf/httpd.conf
