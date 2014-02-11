@@ -100,16 +100,16 @@ function installAll {
 
 function setupUsers {
     for i in $users root; do
-        su $i -c 'cd ~/;
+        su $i -c "cd ~/;
         if [ ! -e .oh-my-zsh ]; then
             git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh;
         fi;
         cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc;
         rm .bashrc .bash_history .bash_profile;
-        git config --global user.email $email;
-        git config --global user.name $name;
+        git config --global user.email '$email';
+        git config --global user.name '$name';
         git config --global core.editor vim;
-        git config --global push.default matching;'
+        git config --global push.default matching;"
         chsh -s /bin/zsh $i
     done
 }
