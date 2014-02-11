@@ -128,5 +128,31 @@ FILE
     systemctl restart httpd
 }
 
-runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache
+function resizeDisk {
+    fdisk /dev/mmcblk0 << FILE
+d
+2
+n
+e
+2
+
+
+n
+l
+
+
+FILE
+    resize2fs /dev/mmcblk0p5
+}
+
+function optionalRestart {
+    echo -n "Restart now? [Y/n]: "
+    read answer
+    if [ "$answer" == "n" ]; then
+        return 0;
+    fi
+    systemctl reboot
+}
+
+runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache resizeDisk optionalRestart
 
