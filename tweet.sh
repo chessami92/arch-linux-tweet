@@ -1,11 +1,21 @@
 #!/bin/bash
 #Twitter status update bot by http://360percents.com
 #Author: Luka Pusic <pusic93@gmail.com>
+
+cd ~/tweet/
  
 #REQUIRED PARAMS
 username="replaceusername"
 password="replacepassword"
 tweet="$*" #must be less than 140 chars
+if [ "$tweet" == "" ]; then
+    while [ "$(date | grep 1969)" != "" ]; do
+        sleep 1
+    done
+    ip=$(/sbin/ifconfig | grep inet | sed -e '/127.0.0.1/d' -e 's/^.*inet \([0-9.]*\).*$/\1/g')
+    time=$(date '+%Y-%m-%d %H:%M:%S')
+    tweet="Current IP: $ip as of $time"
+fi
  
 #EXTRA OPTIONS
 uagent="Mozilla/5.0" #user agent (fake a browser)
