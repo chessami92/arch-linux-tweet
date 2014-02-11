@@ -37,17 +37,18 @@ function tweetIp {
     echo
 
     tweetUser=cnc
+    tweetGroup=cnc
 
     su $tweetUser -c 'mkdir ~/tweet;'
     replaceUser="s/replaceusername/$username/"
     replacePassword="s/replacepassword/$password/"
     file=/home/$tweetUser/tweet/tweet.sh
     sed -e $replaceUser -e $replacePassword tweet.sh > $file
-    chown cnc:cnc $file
+    chown $tweetUser:$tweetGroup $file
     chmod 744 $file
     file=/home/$tweetUser/tweet/tweet.service.tmp
     cp tweet.service $file
-    chown cnc:cnc $file
+    chown $tweetUser:$tweetGroup $file
 
     su $tweetUser -c 'cd ~/tweet;
     replaceUser="s/replaceusername/$USER/";
