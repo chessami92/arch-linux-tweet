@@ -95,7 +95,7 @@ function updateAll {
 }
 
 function installAll {
-    pacman -S --noconfirm vim git zsh gcc make
+    pacman -S --noconfirm vim git zsh gcc make screen apache php php-apache
 }
 
 function setupUsers {
@@ -114,5 +114,19 @@ function setupUsers {
     done
 }
 
-runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers
+function setupApache {
+    su http -c 'mkdir ~/uploads/;'
+    if [ "$(grep PHP /etc/httpd/conf/httpd.conf)" == "" ]; then
+        cat << FILE >> /etc/httpd/conf/httpd.conf
+# Use for PHP 5.x:
+LoadModule php5_module modules/libphp5.so
+AddHandler php5-script php
+Include conf/extra/php5_module.conf
+FILE
+    fi
+    systemctl enable httpd
+    systemctl restart httpd
+}
+
+runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache
 
