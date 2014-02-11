@@ -2,8 +2,10 @@ A simple way to get the raspberry pi set up to run the cnc after installing arch
 
 Run the following commands and you're set.
 
-pacman -S git
+pacman -Sy git
+
 git clone http://github.com/deltarobot/cnc-pi-setup/
+
 ./cnc-pi-setup/setup.sh
 
 This also sets up a service that tweets from the 'cnc' user on system startup.

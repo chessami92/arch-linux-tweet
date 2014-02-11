@@ -1,8 +1,8 @@
 #!/bin/sh
 
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-echo $dir
-. $dir/runner.sh
+cd $(dirname ${BASH_SOURCE[0]})
+
+. runner.sh
 
 function rootPassword {
     echo -n "Enter password for root account: "
@@ -33,6 +33,7 @@ function addUsers {
 
     groupadd $group
     for i in $users; do
+        userdel $i
         useradd -m -g $group $i
         echo -n "Enter password for the $i account: "
         read -s password
@@ -141,8 +142,9 @@ n
 l
 
 
+w
 FILE
-    resize2fs /dev/mmcblk0p5
+    echo 'Run this command after a reboot: "resize2fs /dev/mmcblk0p5"'
 }
 
 function optionalRestart {
