@@ -42,8 +42,8 @@ $password
 $password
 FILE
         rm -r /home/$i/.ssh/
-        cp -r ~/.ssh /home/$i/
-        chown -R $i:$group /home/$i/.ssh/
+        cp -r ~/.ssh /home/$i/.ssh
+        chown -R $i:$group /home/$i/
     done
 }
 
@@ -98,5 +98,21 @@ function installAll {
     pacman -S --noconfirm vim git zsh gcc make
 }
 
-runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll
+function setupUsers {
+    for i in $users root; do
+        su $i -c 'cd ~/;
+        if [ ! -e .oh-my-zsh ]; then
+            git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh;
+        fi;
+        cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc;
+        rm .bashrc .bash_history .bash_profile;
+        git config --global user.email $email;
+        git config --global user.name $name;
+        git config --global core.editor vim;
+        git config --global push.default matching;'
+        chsh -s /bin/zsh $i
+    done
+}
+
+runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers
 
