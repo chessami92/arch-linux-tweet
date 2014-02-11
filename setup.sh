@@ -18,15 +18,33 @@ FILE
 }
 
 function addUsers {
-    groupadd cnc
-    useradd -m -g cnc cnc
-    echo -n "Enter password for the cnc account: "
-    read -s password
-    echo
-    passwd cnc << FILE
+    users="cnc http"
+    group=cnc
+
+    echo Setting up git for all users.
+    echo -n "Enter your email address: "
+    read email
+    echo -n "Enter your first and last name: "
+    read name
+
+    if [ ! -e ~/.ssh/id_rsa ]; then
+        ssh-keygen -t rsa -C $email <<< $'\n'
+    fi
+
+    groupadd $group
+    for i in $users; do
+        useradd -m -g $group $i
+        echo -n "Enter password for the $i account: "
+        read -s password
+        echo
+        passwd $i << FILE
 $password
 $password
 FILE
+        rm -r /home/$i/.ssh/
+        cp -r ~/.ssh /home/$i/
+        chown -R $i:$group /home/$i/.ssh/
+    done
 }
 
 function tweetIp {
