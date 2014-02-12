@@ -1,0 +1,9 @@
+[Unit]
+Description=Tweet current IP
+
+[Service]
+User=replaceusername
+ExecStart=replaceexecpath
+
+[Install]
+WantedBy=multi-user.target
