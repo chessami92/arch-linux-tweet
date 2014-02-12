@@ -1,6 +1,5 @@
 [Unit]
 Description=Tweet current IP
-After=ntpdate.service
 
 [Service]
 User=replaceusername
