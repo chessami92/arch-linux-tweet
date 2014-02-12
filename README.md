@@ -8,6 +8,8 @@ git clone http://github.com/deltarobot/cnc-pi-setup/
 
 ./cnc-pi-setup/setup.sh
 
+(After reboot): resize2fs /dev/mmcblk0p5
+
 This also sets up a service that tweets from the 'cnc' user on system startup.
 
 Thanks to http://360percents.com/posts/command-line-twitter-status-update-for-linux-and-mac/ for the tweeting code.
