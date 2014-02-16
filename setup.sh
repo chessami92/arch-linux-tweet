@@ -143,6 +143,10 @@ AddHandler php5-script php
 Include conf/extra/php5_module.conf
 FILE
     fi
+    gcc updateWebsite.c -o updateWebsite
+    chmod 4755 updateWebsite
+    mv updateWebsite /home/http/updateWebsite
+    cp updateWebsite.sh /home/http/updateWebsite.sh
     systemctl enable httpd
     systemctl restart httpd
 }
