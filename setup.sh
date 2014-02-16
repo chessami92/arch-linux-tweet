@@ -26,6 +26,8 @@ function addUsers {
     read email
     echo -n "Enter your first and last name: "
     read name
+    echo -n "Enter your github username: "
+    read githubUser
 
     if [ ! -e ~/.ssh/id_rsa ]; then
         ssh-keygen -t rsa -C $email <<< $'\n'
@@ -133,6 +135,21 @@ FILE
     fi
     systemctl enable httpd
     systemctl restart httpd
+}
+
+function cloneRepos {
+    cd ~
+    git clone git@github.com:deltarobot/cnc-driver.git <<< yes
+    cd cnc-driver
+    git remote set-url --push origin git@github.com:$githubUser/cnc-driver.git
+    su cnc -c "cd ~;
+    git clone git@github.com:deltarobot/g-code-interpreter.git <<< yes;
+    cd g-code-interpreter
+    git remote set-url --push origin git@github.com:$githubUser/g-code-interpreter.git;"
+    su http -c "cd ~;
+    git clone git@github.com:deltarobot/website-control.git <<< yes;
+    cd website-control
+    git remote set-url --push origin git@github.com:$githubUser/website-control.git;"
 }
 
 function resizeDisk {
