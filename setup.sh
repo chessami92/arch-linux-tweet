@@ -33,6 +33,10 @@ function addUsers {
         ssh-keygen -t rsa -C $email <<< $'\n'
     fi
 
+    mkdir ~/.vim
+    cp .vimrc ~/.vimrc
+    cp .screenrc ~/.screenrc
+
     for i in $users; do
         userdel $i
     done
@@ -49,7 +53,12 @@ $password
 $password
 FILE
         rm -r /home/$i/.ssh/
+        rm /home/$i/.vimrc
+        rm -r /home/$i/.vim/
         cp -r ~/.ssh /home/$i/.ssh
+        cp ~/.vimrc /home/$i/.vimrc
+        cp ~/.screenrc /home/$i/.screenrc
+        cp -r ~/.vim /home/$i/.vim
         chown -R $i:$group /home/$i/
     done
 }
