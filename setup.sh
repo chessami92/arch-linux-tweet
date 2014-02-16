@@ -99,6 +99,7 @@ function tweetIp {
     mv $file /usr/lib/systemd/system/tweet.service
 
     systemctl daemon-reload
+    systemctl enable tweet
     systemctl start tweet
 }
 
@@ -147,10 +148,10 @@ FILE
 }
 
 function cloneRepos {
-    cd ~
+    su -c "cd ~
     git clone git@github.com:deltarobot/cnc-driver.git <<< yes
     cd cnc-driver
-    git remote set-url --push origin git@github.com:$githubUser/cnc-driver.git
+    git remote set-url --push origin git@github.com:$githubUser/cnc-driver.git;"
     su cnc -c "cd ~;
     git clone git@github.com:deltarobot/g-code-interpreter.git <<< yes;
     cd g-code-interpreter
