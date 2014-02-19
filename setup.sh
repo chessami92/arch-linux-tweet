@@ -156,6 +156,8 @@ FILE
 }
 
 function cloneRepos {
+    su -c "cd ~/cnc-pi-setup
+    git remote set-url --push origin git@github.com:$githubUser/cnc-pi-setup.git;"
     su -c "cd ~
     git clone https://www.github.com/deltarobot/cnc-driver <<< yes
     cd cnc-driver
