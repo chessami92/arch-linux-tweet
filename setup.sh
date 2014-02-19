@@ -147,6 +147,10 @@ FILE
     chmod 4755 updateWebsite
     mv updateWebsite /home/http/updateWebsite
     cp updateWebsite.sh /home/http/updateWebsite.sh
+    su cnc -c 'cd ~;
+    chmod 750 /home/cnc/
+    mkfifo /home/cnc/gcode
+    chmod 770 /home/cnc/gcode'
     systemctl enable httpd
     systemctl restart httpd
 }
@@ -193,5 +197,5 @@ function optionalRestart {
     systemctl reboot
 }
 
-runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache resizeDisk optionalRestart
+runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos resizeDisk optionalRestart
 
