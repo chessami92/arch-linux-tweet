@@ -26,10 +26,16 @@ function addUsers {
     read email
     echo -n "Enter your first and last name: "
     read name
+    echo -n "Enter your github username: "
+    read githubUser
 
     if [ ! -e ~/.ssh/id_rsa ]; then
         ssh-keygen -t rsa -C $email <<< $'\n'
     fi
+
+    mkdir ~/.vim
+    cp .vimrc ~/.vimrc
+    cp .screenrc ~/.screenrc
 
     for i in $users; do
         userdel $i
@@ -47,7 +53,12 @@ $password
 $password
 FILE
         rm -r /home/$i/.ssh/
+        rm /home/$i/.vimrc
+        rm -r /home/$i/.vim/
         cp -r ~/.ssh /home/$i/.ssh
+        cp ~/.vimrc /home/$i/.vimrc
+        cp ~/.screenrc /home/$i/.screenrc
+        cp -r ~/.vim /home/$i/.vim
         chown -R $i:$group /home/$i/
     done
 }
@@ -88,6 +99,7 @@ function tweetIp {
     mv $file /usr/lib/systemd/system/tweet.service
 
     systemctl daemon-reload
+    systemctl enable tweet
     systemctl start tweet
 }
 
@@ -131,8 +143,33 @@ AddHandler php5-script php
 Include conf/extra/php5_module.conf
 FILE
     fi
+    gcc updateWebsite.c -o updateWebsite
+    chmod 4755 updateWebsite
+    mv updateWebsite /home/http/updateWebsite
+    cp updateWebsite.sh /home/http/updateWebsite.sh
+    su cnc -c 'cd ~;
+    chmod 750 /home/cnc/
+    mkfifo /home/cnc/gcode
+    chmod 770 /home/cnc/gcode'
     systemctl enable httpd
     systemctl restart httpd
+}
+
+function cloneRepos {
+    su -c "cd ~/cnc-pi-setup
+    git remote set-url --push origin git@github.com:$githubUser/cnc-pi-setup.git;"
+    su -c "cd ~
+    git clone https://www.github.com/deltarobot/cnc-driver <<< yes
+    cd cnc-driver
+    git remote set-url --push origin git@github.com:$githubUser/cnc-driver.git;"
+    su cnc -c "cd ~;
+    git clone https://www.github.com/deltarobot/g-code-interpreter <<< yes;
+    cd g-code-interpreter
+    git remote set-url --push origin git@github.com:$githubUser/g-code-interpreter.git;"
+    su http -c "cd ~;
+    git clone https://www.github.com/deltarobot/website-control <<< yes;
+    cd website-control
+    git remote set-url --push origin git@github.com:$githubUser/website-control.git;"
 }
 
 function resizeDisk {
@@ -162,5 +199,5 @@ function optionalRestart {
     systemctl reboot
 }
 
-runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache resizeDisk optionalRestart
+runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos resizeDisk optionalRestart
 
