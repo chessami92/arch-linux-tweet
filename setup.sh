@@ -135,9 +135,12 @@ function setupApache {
     groupdel http
     groupadd http
     su http -c 'mkdir ~/uploads/;'
+    mv /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.bak
+    sed -e 's/^\(LoadModule mpm_event.*\)/#\1/' /etc/httpd/conf/httpd.conf.bak > /etc/httpd/conf/httpd.conf
     if [ "$(grep PHP /etc/httpd/conf/httpd.conf)" == "" ]; then
         cat << FILE >> /etc/httpd/conf/httpd.conf
 # Use for PHP 5.x:
+LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
 LoadModule php5_module modules/libphp5.so
 AddHandler php5-script php
 Include conf/extra/php5_module.conf
@@ -147,10 +150,11 @@ FILE
     chmod 4755 updateWebsite
     mv updateWebsite /home/http/updateWebsite
     cp updateWebsite.sh /home/http/updateWebsite.sh
-    su cnc -c 'cd ~;
-    chmod 750 /home/cnc/
-    mkfifo /home/cnc/gcode
-    chmod 770 /home/cnc/gcode'
+    su cnc -c 'cd ~
+    chmod 750 ./
+    rm gcode serial-data
+    mkfifo gcode serial-data
+    chmod 770 gcode serial-data'
     systemctl enable httpd
     systemctl restart httpd
 }
