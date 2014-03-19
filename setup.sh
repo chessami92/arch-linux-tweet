@@ -136,7 +136,7 @@ function setupApache {
     groupadd http
     su http -c 'mkdir ~/uploads/;'
     mv /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.bak
-    sed -e 's/^\(LoadModule mpm_event.*\)/#\1/' /etc/httpd/conf/httpd.conf.bak > /etc/httpd/conf/httpd.conf
+    sed -e 's/^\(LoadModule mpm_event.*\)/#\1/' -e 's/^Group http/Group cnc/' /etc/httpd/conf/httpd.conf.bak > /etc/httpd/conf/httpd.conf
     if [ "$(grep PHP /etc/httpd/conf/httpd.conf)" == "" ]; then
         cat << FILE >> /etc/httpd/conf/httpd.conf
 # Use for PHP 5.x:
