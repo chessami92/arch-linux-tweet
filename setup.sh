@@ -203,5 +203,20 @@ function optionalRestart {
     systemctl reboot
 }
 
-runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos resizeDisk optionalRestart
+function wifiSetup {
+    WIFI_DIR=/etc/netctl/wlan0-*
+    pacman -S --noconfirm dkms-8192cu
+    pacman -S --noconfirm wireless_tools
+    ip link set wlan0 up
+    wifi-menu -o
+    for filename in $WIFI_DIR
+        do
+            echo $(basename "$filename")
+            netctl start  $(basename "$filename")
+            netctl enable $(basename "$filename")
+
+        done
+}
+
+runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos wifiSetup resizeDisk optionalRestart
 
