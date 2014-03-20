@@ -66,8 +66,9 @@ FILE
 function wifiSetup {
     mkdir ~/scripts
     cp wifiSetup.sh ~/scripts/
+    chmod 744 ~/scripts/wifiSetup.sh
     
-    mv wifi.service /lib/systemd/system/wifi.service
+    cp wifi.service /lib/systemd/system/wifi.service
 
     systemctl daemon-reload
     systemctl enable wifi
