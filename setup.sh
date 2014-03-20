@@ -63,6 +63,17 @@ FILE
     done
 }
 
+function wifiSetup {
+    mkdir ~/scripts
+    cp wifiSetup.sh ~/scripts/
+    
+    mv wifi.service /lib/systemd/system/wifi.service
+
+    systemctl daemon-reload
+    systemctl enable wifi
+    systemctl start wifi
+}
+
 function tweetIp {
     echo -n "Enter twitter username: "
     read username
@@ -112,7 +123,7 @@ function updateAll {
 }
 
 function installAll {
-    pacman -S --noconfirm vim git zsh gcc make screen apache php php-apache
+    pacman -S --noconfirm vim git zsh gcc make screen apache php php-apache dkms-8192cu wireless_tools
 }
 
 function setupUsers {
@@ -199,5 +210,5 @@ function optionalRestart {
     systemctl reboot
 }
 
-runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos resizeDisk optionalRestart
+runWithRetry rootPassword addUsers wifiSetup tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos resizeDisk optionalRestart
 

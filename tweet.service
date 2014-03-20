@@ -1,5 +1,6 @@
 [Unit]
 Description=Tweet current IP
+After=wifi.service
 
 [Service]
 User=replaceusername
