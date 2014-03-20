@@ -1,0 +1,8 @@
+[Unit]
+Description=Startup and try known wifi configurations
+
+[Service]
+ExecStart=/root/scripts/wifiSetup.sh
+
+[Install]
+WantedBy=multi-user.target
