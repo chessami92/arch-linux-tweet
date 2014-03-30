@@ -164,9 +164,9 @@ FILE
     cp updateWebsite.sh /home/http/updateWebsite.sh
     su cnc -c 'cd ~
     chmod 750 ./
-    rm gcode serial-data
-    mkfifo gcode serial-data
-    chmod 770 gcode serial-data'
+    rm gcode serial-data bootload
+    mkfifo gcode serial-data bootload
+    chmod 770 gcode serial-data bootload'
     systemctl enable httpd
     systemctl restart httpd
 }
