@@ -63,6 +63,18 @@ FILE
     done
 }
 
+function wifiSetup {
+    mkdir ~/scripts
+    cp wifiSetup.sh ~/scripts/
+    chmod 744 ~/scripts/wifiSetup.sh
+    
+    cp wifi.service /lib/systemd/system/wifi.service
+
+    systemctl daemon-reload
+    systemctl enable wifi
+    systemctl start wifi
+}
+
 function tweetIp {
     echo -n "Enter twitter username: "
     read username
@@ -112,7 +124,7 @@ function updateAll {
 }
 
 function installAll {
-    pacman -S --noconfirm vim git zsh gcc make screen apache php php-apache
+    pacman -S --noconfirm vim git zsh gcc make screen apache php php-apache dkms-8192cu wireless_tools
 }
 
 function setupUsers {
@@ -194,6 +206,11 @@ FILE
     echo 'Run this command after a reboot: "resize2fs /dev/mmcblk0p5"'
 }
 
+function disableUart {
+sed -i 's/console=ttyAMA0,115200 kgdboc=ttyAMA0,115200//g' /boot/cmdline.txt
+    systemctl disable serial-getty@ttyAMA0.service
+}
+
 function optionalRestart {
     echo -n "Restart now? [Y/n]: "
     read answer
@@ -203,20 +220,5 @@ function optionalRestart {
     systemctl reboot
 }
 
-function wifiSetup {
-    WIFI_DIR=/etc/netctl/wlan0-*
-    pacman -S --noconfirm dkms-8192cu
-    pacman -S --noconfirm wireless_tools
-    ip link set wlan0 up
-    wifi-menu -o
-    for filename in $WIFI_DIR
-        do
-            echo $(basename "$filename")
-            netctl start  $(basename "$filename")
-            netctl enable $(basename "$filename")
-
-        done
-}
-
-runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos wifiSetup resizeDisk optionalRestart
+runWithRetry rootPassword addUsers tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos wifiSetup disableUart resizeDisk optionalRestart
 
