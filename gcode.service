@@ -1,0 +1,9 @@
+[Unit]
+Description=Startup all needed programs
+After=wifi.service
+
+[Service]
+ExecStart=/root/scripts/startGCode.sh
+
+[Install]
+WantedBy=multi-user.target
