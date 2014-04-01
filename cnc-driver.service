@@ -1,0 +1,9 @@
+[Unit]
+Description=Start the cnc driver service.
+
+[Service]
+ExecStart=/root/bin/driver -r /home/cnc/serial-data
+
+[Install]
+WantedBy=multi-user.target
+

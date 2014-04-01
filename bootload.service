@@ -1,0 +1,9 @@
+[Unit]
+Description=Start the cnc driver service.
+
+[Service]
+ExecStart=/root/bin/driver -b -r /home/cnc/bootload
+
+[Install]
+WantedBy=multi-user.target
+

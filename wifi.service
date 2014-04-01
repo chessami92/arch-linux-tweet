@@ -6,3 +6,4 @@ ExecStart=/root/scripts/wifiSetup.sh
 
 [Install]
 WantedBy=multi-user.target
+

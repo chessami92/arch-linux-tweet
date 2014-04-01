@@ -173,19 +173,31 @@ FILE
 
 function cloneRepos {
     su -c "cd ~/cnc-pi-setup
-    git remote set-url --push origin git@github.com:$githubUser/cnc-pi-setup.git;"
+    git remote set-url --push origin git@github.com:$githubUser/cnc-pi-setup.git"
     su -c "cd ~
     git clone https://www.github.com/deltarobot/cnc-driver <<< yes
     cd cnc-driver
-    git remote set-url --push origin git@github.com:$githubUser/cnc-driver.git;"
-    su cnc -c "cd ~;
-    git clone https://www.github.com/deltarobot/g-code-interpreter <<< yes;
+    git remote set-url --push origin git@github.com:$githubUser/cnc-driver.git
+    make install"
+    su cnc -c "cd ~
+    git clone https://www.github.com/deltarobot/g-code-interpreter <<< yes
     cd g-code-interpreter
-    git remote set-url --push origin git@github.com:$githubUser/g-code-interpreter.git;"
-    su http -c "cd ~;
-    git clone https://www.github.com/deltarobot/website-control <<< yes;
+    git remote set-url --push origin git@github.com:$githubUser/g-code-interpreter.git
+    make install"
+    su http -c "cd ~
+    git clone https://www.github.com/deltarobot/website-control <<< yes
     cd website-control
-    git remote set-url --push origin git@github.com:$githubUser/website-control.git;"
+    git remote set-url --push origin git@github.com:$githubUser/website-control.git"
+}
+
+function setupCncServices {
+    for i in bootload cnc-driver g-code-interpreter; do
+        cp "$i.service" /lib/systemd/system
+        systemctl daemon-reload
+        systemctl enable $i
+        systemctl stop $i
+        systemctl start $i
+    done
 }
 
 function resizeDisk {
@@ -215,5 +227,5 @@ function optionalRestart {
     systemctl reboot
 }
 
-runWithRetry rootPassword addUsers wifiSetup tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos resizeDisk optionalRestart
+runWithRetry rootPassword addUsers wifiSetup tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos setupCncServices resizeDisk optionalRestart
 
