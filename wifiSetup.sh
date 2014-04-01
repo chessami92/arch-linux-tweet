@@ -8,6 +8,8 @@ for filename in $WIFI_DIR; do
     netctl stop $wlan
 done
 
+ip link set wlan0 up
+
 for filename in $WIFI_DIR; do
     wlan=$(basename "$filename" )
     echo "Trying $wlan"
@@ -16,3 +18,6 @@ for filename in $WIFI_DIR; do
         break;
     fi
 done
+
+/usr/bin/ntpd -gq > /dev/null
+

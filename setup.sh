@@ -147,9 +147,12 @@ function setupApache {
     groupdel http
     groupadd http
     su http -c 'mkdir ~/uploads/;'
+    mv /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.bak
+    sed -e 's/^\(LoadModule mpm_event.*\)/#\1/' -e 's/^Group http/Group cnc/' /etc/httpd/conf/httpd.conf.bak > /etc/httpd/conf/httpd.conf
     if [ "$(grep PHP /etc/httpd/conf/httpd.conf)" == "" ]; then
         cat << FILE >> /etc/httpd/conf/httpd.conf
 # Use for PHP 5.x:
+LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
 LoadModule php5_module modules/libphp5.so
 AddHandler php5-script php
 Include conf/extra/php5_module.conf
@@ -159,29 +162,42 @@ FILE
     chmod 4755 updateWebsite
     mv updateWebsite /home/http/updateWebsite
     cp updateWebsite.sh /home/http/updateWebsite.sh
-    su cnc -c 'cd ~;
-    chmod 750 /home/cnc/
-    mkfifo /home/cnc/gcode
-    chmod 770 /home/cnc/gcode'
+    su cnc -c 'cd ~
+    chmod 750 ./
+    rm gcode serial-data bootload
+    mkfifo gcode serial-data bootload
+    chmod 770 gcode serial-data bootload'
     systemctl enable httpd
     systemctl restart httpd
 }
 
 function cloneRepos {
     su -c "cd ~/cnc-pi-setup
-    git remote set-url --push origin git@github.com:$githubUser/cnc-pi-setup.git;"
+    git remote set-url --push origin git@github.com:$githubUser/cnc-pi-setup.git"
     su -c "cd ~
     git clone https://www.github.com/deltarobot/cnc-driver <<< yes
     cd cnc-driver
-    git remote set-url --push origin git@github.com:$githubUser/cnc-driver.git;"
-    su cnc -c "cd ~;
-    git clone https://www.github.com/deltarobot/g-code-interpreter <<< yes;
+    git remote set-url --push origin git@github.com:$githubUser/cnc-driver.git
+    make install"
+    su cnc -c "cd ~
+    git clone https://www.github.com/deltarobot/g-code-interpreter <<< yes
     cd g-code-interpreter
-    git remote set-url --push origin git@github.com:$githubUser/g-code-interpreter.git;"
-    su http -c "cd ~;
-    git clone https://www.github.com/deltarobot/website-control <<< yes;
+    git remote set-url --push origin git@github.com:$githubUser/g-code-interpreter.git
+    make install"
+    su http -c "cd ~
+    git clone https://www.github.com/deltarobot/website-control <<< yes
     cd website-control
-    git remote set-url --push origin git@github.com:$githubUser/website-control.git;"
+    git remote set-url --push origin git@github.com:$githubUser/website-control.git"
+}
+
+function setupCncServices {
+    for i in bootload cnc-driver g-code-interpreter; do
+        cp "$i.service" /lib/systemd/system
+        systemctl daemon-reload
+        systemctl enable $i
+        systemctl stop $i
+        systemctl start $i
+    done
 }
 
 function resizeDisk {
@@ -211,5 +227,5 @@ function optionalRestart {
     systemctl reboot
 }
 
-runWithRetry rootPassword addUsers wifiSetup tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos resizeDisk optionalRestart
+runWithRetry rootPassword addUsers wifiSetup tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos setupCncServices resizeDisk optionalRestart
 
