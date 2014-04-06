@@ -218,6 +218,11 @@ FILE
     echo 'Run this command after a reboot: "resize2fs /dev/mmcblk0p5"'
 }
 
+function disableUart {
+    sed -i 's/console=ttyAMA0,115200 kgdboc=ttyAMA0,115200//g' /boot/cmdline.txt
+    systemctl disable serial-getty@ttyAMA0.service
+}
+
 function optionalRestart {
     echo -n "Restart now? [Y/n]: "
     read answer
@@ -227,5 +232,5 @@ function optionalRestart {
     systemctl reboot
 }
 
-runWithRetry rootPassword addUsers wifiSetup tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos setupCncServices resizeDisk optionalRestart
+runWithRetry rootPassword addUsers wifiSetup tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos disableUart setupCncServices resizeDisk optionalRestart
 
