@@ -1,0 +1,9 @@
+[Unit]
+Description=Monitor the CPU temperature and shutdown if too high.
+
+[Service]
+ExecStart=/root/scripts/thermalShutdown.sh
+
+[Install]
+WantedBy=multi-user.target
+

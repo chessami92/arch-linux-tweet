@@ -75,6 +75,18 @@ function wifiSetup {
     systemctl start wifi
 }
 
+function thermalShutdown {
+    mkdir ~/logs
+    cp thermalShutdown.sh ~/scripts/
+    chmod 744 ~/scripts/thermalShutdown.sh
+
+    cp thermalShutdown.service /lib/systemd/system/thermalShutdown.service
+
+    systemctl daemon-reload
+    systemctl enable thermalShutdown
+    systemctl start thermalShutdown
+}
+
 function tweetIp {
     echo -n "Enter twitter username: "
     read username
@@ -232,5 +244,5 @@ function optionalRestart {
     systemctl reboot
 }
 
-runWithRetry rootPassword addUsers wifiSetup tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos disableUart setupCncServices resizeDisk optionalRestart
+runWithRetry rootPassword addUsers wifiSetup thermalShutdown tweetIp setTimezone updateAll installAll setupUsers setupApache cloneRepos disableUart setupCncServices resizeDisk optionalRestart
 
