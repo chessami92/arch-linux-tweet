@@ -3,7 +3,7 @@ Description=Tweet current IP
 
 [Service]
 User=cnc
-ExecStart=/home/cnc/bin/g-code-interpreter -r /home/cnc/gcode -w /home/cnc/serial-data -c /home/cnc/g-code-interpreter/config.properties
+ExecStart=/home/cnc/bin/g-code-interpreter -r /home/cnc/gcode -w /home/cnc/serial-data -c /home/cnc/config.properties
 
 [Install]
 WantedBy=multi-user.target
