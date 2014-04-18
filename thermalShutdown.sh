@@ -7,9 +7,9 @@ while [ 1 ]; do
     if [ "$cpuTemp" -ge 60000 ]; then
         $(date >> /root/logs/thermalShutdown.log)
         $(echo "Temperature was $cpuTemp" >> /root/logs/thermalShutdown.log)
-        echo "8" > /sys/class/gpio/export
-        echo "out" > /sys/class/gpio/gpio8/direction
-        echo "1" > /sys/class/gpio/gpio8/value
+        echo "14" > /sys/class/gpio/export
+        echo "out" > /sys/class/gpio/gpio14/direction
+        echo "0" > /sys/class/gpio/gpio14/value
         sleep 1
         systemctl poweroff
     fi
