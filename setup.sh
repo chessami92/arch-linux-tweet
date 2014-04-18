@@ -171,8 +171,10 @@ Include conf/extra/php5_module.conf
 FILE
     fi
     gcc updateWebsite.c -o updateWebsite
-    chmod 4755 updateWebsite
-    mv updateWebsite /home/http/updateWebsite
+    gcc shutdown.c -o shutdown
+    chmod 4755 updateWebsite shutdown
+    mv updateWebsite /home/http/
+    mv shutdown /home/http/
     su cnc -c 'cd ~
     chmod 750 ./
     rm gcode serial-data bootload
