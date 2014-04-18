@@ -173,7 +173,6 @@ FILE
     gcc updateWebsite.c -o updateWebsite
     chmod 4755 updateWebsite
     mv updateWebsite /home/http/updateWebsite
-    cp updateWebsite.sh /home/http/updateWebsite.sh
     su cnc -c 'cd ~
     chmod 750 ./
     rm gcode serial-data bootload
