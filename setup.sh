@@ -158,7 +158,9 @@ function setupUsers {
 function setupApache {
     groupdel http
     groupadd http
-    su http -c 'mkdir ~/uploads/;'
+    su http -c 'cd
+    mkdir uploads
+    mkdir bin'
     mv /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.bak
     sed -e 's/^\(LoadModule mpm_event.*\)/#\1/' -e 's/^Group http/Group cnc/' /etc/httpd/conf/httpd.conf.bak > /etc/httpd/conf/httpd.conf
     if [ "$(grep PHP /etc/httpd/conf/httpd.conf)" == "" ]; then
@@ -171,9 +173,14 @@ Include conf/extra/php5_module.conf
 FILE
     fi
     gcc updateWebsite.c -o updateWebsite
-    chmod 4755 updateWebsite
-    mv updateWebsite /home/http/updateWebsite
-    cp updateWebsite.sh /home/http/updateWebsite.sh
+    gcc shutdown.c -o shutdown
+    gcc emergencyStop.c -o emergencyStop
+    gcc restartGCode.c -o restartGCode
+    chmod 4755 updateWebsite shutdown emergencyStop restartGCode
+    mv updateWebsite /home/http/bin/
+    mv shutdown /home/http/bin/
+    mv emergencyStop /home/http/bin/
+    mv restartGCode /home/http/bin/
     su cnc -c 'cd ~
     chmod 750 ./
     rm gcode serial-data bootload

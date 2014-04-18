@@ -2,7 +2,9 @@
 
 int main() {
     setuid( 0 );
-    system( "/home/http/updateWebsite.sh" );
+    system( "cp -r /home/http/website-control/* /srv/http/" );
+    system( "chown -R root:root /srv/http/" );
+    system( "chmod -R 755 /srv/http" );
 
     return 0;
 }
