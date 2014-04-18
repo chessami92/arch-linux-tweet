@@ -175,10 +175,12 @@ FILE
     gcc updateWebsite.c -o updateWebsite
     gcc shutdown.c -o shutdown
     gcc emergencyStop.c -o emergencyStop
-    chmod 4755 updateWebsite shutdown emergencyStop
+    gcc restartGCode.c -o restartGCode
+    chmod 4755 updateWebsite shutdown emergencyStop restartGCode
     mv updateWebsite /home/http/bin/
     mv shutdown /home/http/bin/
     mv emergencyStop /home/http/bin/
+    mv restartGCode /home/http/bin/
     su cnc -c 'cd ~
     chmod 750 ./
     rm gcode serial-data bootload
