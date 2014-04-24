@@ -12,7 +12,8 @@ if [ "$tweet" == "" ]; then
     while [ "$(date | grep 1969)" != "" ]; do
         sleep 1
     done
-    ip=$(/sbin/ifconfig | grep inet | sed -e '/127.0.0.1/d' -e 's/^.*inet \([0-9.]*\).*$/\1/g' | tr '\n' '@' | sed -e 's/@$//g' -e 's/@/ and /g' )
+    ip=$(/sbin/ifconfig | grep inet | sed -e '/127.0.0.1/d' -e 's/^.*inet \([0-9.]*\).*$/\1/g' | tr '\n' '~' )
+    echo "G101|$ip" > /home/cnc/gcode
     time=$(date '+%Y-%m-%d %H:%M:%S')
     tweet="Current IP: $ip as of $time"
 fi
