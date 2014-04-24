@@ -185,8 +185,8 @@ FILE
     chmod 750 ./
     rm gcode serial-data bootload
     mkfifo gcode serial-data bootload
-    touch config.properties
-    chmod 770 gcode serial-data bootload config.properties'
+    touch config.properties bootload-image
+    chmod 770 gcode serial-data bootload bootload-image config.properties'
     systemctl enable httpd
     systemctl restart httpd
 }
